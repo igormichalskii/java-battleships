@@ -1,4 +1,3 @@
-
 public interface Weapon {
-	void fire(Board board, int col, int row);
+    void fire(Board board, int row, int col);
 }
