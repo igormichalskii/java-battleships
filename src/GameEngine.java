@@ -121,6 +121,20 @@ public class GameEngine {
                 break;
             }
         }
+        System.out.println("\n================================================");
+        System.out.println("					DEBREFING LOG					");
+        System.out.println("==================================================");
+        System.out.println("FINAL COMBAT SCORE: " + score);
+        
+        if (score >= 300) {
+        	System.out.println("EVALUATION: Tactical Genius. Medal of Honor inbound.");
+        } else if (score > 0) {
+        	System.out.println("EVALUATION: Acceptable performance. At least you didn't sink yourself.");
+        } else {
+        	System.out.println("EVALUATION: Absolute disaster. Court-material proceedings have begun.");
+        }
+        System.out.println("==================================================");
+        
         scanner.close();
     }
 }
