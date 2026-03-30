@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Random;
+
 public class Shipyard {
     public boolean placeShip(Board board, Ship ship, int row, int col, boolean isHorizontal) {
         int size = ship.getSize();
@@ -19,4 +22,17 @@ public class Shipyard {
         }
         return true;
     }
+    
+	public void deployFleetRandomly(Board board, List<Ship> fleet) {
+		Random rand = new Random();
+		for (Ship ship : fleet) {
+			boolean placed = false;
+			while (!placed) {
+				int r = rand.nextInt(board.SIZE);
+				int c = rand.nextInt(board.SIZE);
+				boolean horiz = rand.nextBoolean();
+				placed = placeShip(board, ship, r, c, horiz);
+			}
+		}
+	}
 }

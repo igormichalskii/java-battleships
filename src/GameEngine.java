@@ -6,14 +6,18 @@ public class GameEngine {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Shipyard shipyard = new Shipyard();
+        
+        int score = 0;
+        int nukeAmmo = 1;
+        int radarAmmo = 2;
 
         // Setup Enemy
         Board enemyBoard = new Board();
         List<Ship> enemyFleet = new ArrayList<>();
         enemyFleet.add(new Carrier());
         enemyFleet.add(new Submarine());
-        shipyard.placeShip(enemyBoard, enemyFleet.get(0), 2, 2, true);
-        shipyard.placeShip(enemyBoard, enemyFleet.get(1), 5, 7, false);
+        enemyFleet.add(new Battleship());
+        shipyard.deployFleetRandomly(enemyBoard, enemyFleet);
 
         // Setup Player
         Board playerBoard = new Board();
@@ -32,7 +36,8 @@ public class GameEngine {
 
         while (true) {
             System.out.println("\n=== ENEMY TERRITORY ===");
-            enemyBoard.printBoard(true); 
+            enemyBoard.printBoard(true);
+            System.out.println("SCORE: " + score + " | NUKES: " + nukeAmmo + " | RADARS: " + radarAmmo);
 
             System.out.println("\nSelect Weapon System (1. Standard | 2. Nuke | 3. Radar):");
             System.out.print("Command: ");
@@ -45,9 +50,29 @@ public class GameEngine {
             System.out.println();
 
             switch (choice) {
-                case 1: standard.fire(enemyBoard, row, col); break;
-                case 2: nuke.fire(enemyBoard, row, col); break;
-                case 3: radar.fire(enemyBoard, row, col); break;
+                case 1: 
+                	standard.fire(enemyBoard, row, col); 
+                	score += enemyBoard.getCell(row, col) != null & enemyBoard.getCell(row, col).hasShip() ? 50 : 0;
+                	break;
+                case 2: 
+                	if (nukeAmmo > 0) {
+                		nuke.fire(enemyBoard, row, col);
+                		nukeAmmo--;
+                		score -= 10;
+                	} else {
+                		System.out.println("Click. Out of nukes. Firing standard artillery instead.");
+                		standard.fire(enemyBoard, row, col);
+                		score += enemyBoard.getCell(row, col) != null && enemyBoard.getCell(row, col).hasShip() ? 50 : 0;
+                	}
+                	break;
+                case 3:
+                	if (radarAmmo > 0) {
+                		radar.fire(enemyBoard, row, col);
+                		radarAmmo--;
+                	} else {
+                		System.out.println("Radar offline. Guessing blindly.");
+                	}
+                	break;
                 default: System.out.println("Invalid command. Wasted turn.");
             }
 
