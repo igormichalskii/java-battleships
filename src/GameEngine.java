@@ -22,10 +22,34 @@ public class GameEngine {
         // Setup Player
         Board playerBoard = new Board();
         List<Ship> playerFleet = new ArrayList<>();
+        
         playerFleet.add(new Destroyer());
-        playerFleet.add(new PatrolBoat());
-        shipyard.placeShip(playerBoard, playerFleet.get(0), 0, 0, true);
-        shipyard.placeShip(playerBoard, playerFleet.get(1), 8, 8, false);
+        playerFleet.add(new Carrier());
+        playerFleet.add(new Submarine());
+        
+        System.out.println("\n=== DEPLOY YOUR FLEET ===");
+        
+        for (Ship ship : playerFleet) {
+        	boolean deployed = false;
+        	while (!deployed) {
+        		System.out.println("\n--- Current Grid ---");
+        		playerBoard.printBoard(false);
+        		
+        		System.out.println("\nDeploying: " + ship.getName() + "(Length: " + ship.getSize() + ")");
+        		System.out.println("Enter Start Row (0-9): ");
+        		int r = scanner.nextInt();
+        		System.out.print("Enter Start Col (0-9): ");
+        		int c = scanner.nextInt();
+        		System.out.print("Horizontal alignment? (true/false): ");
+        		boolean horiz = scanner.nextBoolean();
+        		
+        		deployed = shipyard.placeShip(playerBoard, ship, r, c, horiz);
+        		
+        		if (!deployed) { System.out.println("Invalid coordinates. Try again."); }
+        		}
+        	}
+        playerBoard.printBoard(false);
+        System.out.println("\nAll vessels secured. Commencing war games.");
 
         EnemyAI skynet = new EnemyAI();
         Weapon standard = new StandardShot();
